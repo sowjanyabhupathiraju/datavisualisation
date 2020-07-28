@@ -15,7 +15,7 @@ var barChart = svg.selectAll("rect")
             return d*20;
             })
     .attr("width", barWidth-barPadding)
-    .attr("fill", 'red')
+    .attr("fill", 'grey')
     .attr("transform", function (d, i) {
         var translate = [barWidth * i, 0]
         return "translate("+translate+")";
