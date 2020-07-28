@@ -12,7 +12,7 @@ var barChart = svg.selectAll("rect")
     .attr("y",function(d) {
         return chartHeight -d })
     .attr("height", function(d) {
-            return d*2;
+            return d*20;
             })
     .attr("width", barWidth-barPadding)
     .attr("fill", 'blue')
