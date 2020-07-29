@@ -1,22 +1,38 @@
-var dataset = [28, 40, 56, 50, 75, 90, 120, 120, 100];
-var chartWidth = 500, chartHeight = 300, barPadding = 5;
-var barWidth = (chartWidth / dataset.length);
 
-var svg = d3.select("svg")
-    .attr("width", chartWidth)
-    .attr("height", chartHeight);
-var barChart = svg.selectAll("rect")
-    .data(dataset)
-    .enter()
-    .append("rect")
-    .attr("y",function(d) {
-        return chartHeight -d })
-    .attr("height", function(d) {
-            return d*20;
-            })
-    .attr("width", barWidth-barPadding)
-    .attr("fill", 'grey')
-    .attr("transform", function (d, i) {
-        var translate = [barWidth * i, 0]
-        return "translate("+translate+")";
-            });
+async function init() {
+const data = await d3.csv('https://flunky.github.io/cars2017.csv');
+var logScalex = d3.scaleLog().base(10)
+  .domain([10, 150])
+  .range([0, 200]);
+var logScaley = d3.scaleLog().base(10)
+  .domain([10, 150])
+  .range([200, 0]);
+var margin = 50;
+
+
+d3.select('svg').attr("width", 400).attr("height", 400)
+.append("g")
+.attr("transform", "translate(50,50)" )
+.selectAll('circle')
+.data(data)
+.enter()
+.append('circle')
+.attr('cx', function(d,i){return logScalex(d.AverageCityMPG);})
+.attr('cy', function(d,i){return logScaley(d.AverageHighwayMPG);})
+.attr('r', function(d,i){return d.EngineCylinders*2 -(d.EngineCylinders)+2 ;})
+
+var logScaleaxisx = d3.scaleLog().base(10)
+  .domain([10, 150])
+  .range([0, 200]);
+var logScaleaxisy = d3.scaleLog().base(10)
+  .domain([10, 150])
+  .range([200, 0]);
+
+var y_axis = d3.axisLeft().scale(logScaleaxisy);
+d3.select('svg').append("g").attr("transform","translate(50,50)").call((y_axis).tickValues([10,20,50,100]).tickFormat(d3.format("~s")).ticks(4))
+
+
+var x_axis = d3.axisBottom().scale(logScaleaxisx);
+d3.select('svg').append("g").attr("transform","translate(50,250)").call((x_axis).tickValues([10,20,50,100]).tickFormat(d3.format("~s")))
+
+}
