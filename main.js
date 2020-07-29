@@ -1,13 +1,6 @@
 
 
 const data = await d3.csv('https://flunky.github.io/cars2017.csv');
-var logScalex = d3.scaleLog().base(10)
-  .domain([10, 150])
-  .range([0, 200]);
-var logScaley = d3.scaleLog().base(10)
-  .domain([10, 150])
-  .range([200, 0]);
-var margin = 50;
 
 
 var logScaleaxisx = d3.scaleLog().base(10)
