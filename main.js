@@ -1,19 +1,26 @@
 
 
-const data = await d3.csv('https://flunky.github.io/cars2017.csv');
 
 
-var logScaleaxisx = d3.scaleLog().base(10)
-  .domain([10, 150])
-  .range([0, 200]);
-var logScaleaxisy = d3.scaleLog().base(10)
-  .domain([10, 150])
-  .range([200, 0]);
+xdomain = [0,1,2,3,4,5];
+xrange = [0,200];
+ydomain = [4,42];
+yrange = [180.9524,0];
+hdomain = [0,42];
+hrange = [0,200];
+xs= d3.scaleBand().domain(xdomain).range(xrange)
+ys= d3.scaleLinear().domain(ydomain).range(yrange)
+hs= d3.scaleLinear().domain(hdomain).range(hrange)
 
-var y_axis = d3.axisLeft().scale(logScaleaxisy);
-d3.select('svg').append("g").attr("transform","translate(50,50)").call((y_axis).tickValues([10,20,50,100]).tickFormat(d3.format("~s")).ticks(4))
+var margin =50;
 
+var g = d3.select('svg').attr("width", 400).attr("height", 400).append("g").attr("transform", "translate(50,50)")
 
-var x_axis = d3.axisBottom().scale(logScaleaxisx);
-d3.select('svg').append("g").attr("transform","translate(50,250)").call((x_axis).tickValues([10,20,50,100]).tickFormat(d3.format("~s")))
-
+g.selectAll("rect")
+.data(data)
+.enter()
+.append("rect")
+.attr("x", function(d,i){return xs(i);})
+.attr("y", function(d){return ys(d);})
+.attr("width", 33.3333)
+.attr("height", function(d){return hs(d);})
