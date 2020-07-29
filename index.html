@@ -1,68 +1,56 @@
-<!-- Code from d3-graph-gallery.com -->
-<!DOCTYPE html>
-<meta charset="utf-8">
-
-<!-- Load d3.js -->
-<script src="https://d3js.org/d3.v4.js"></script>
-
-<!-- Create a div where the graph will take place -->
-<div id="my_dataviz"></div>
 
 
+
+
+
+
+
+
+
+<html>
+<script src='https://d3js.org/d3.v5.min.js'></script>
+<style> circle {fill: lightblue; stroke: black;} </style>
+<body onload='init()'>
+<svg width=300 height=300>
+</svg>
 <script>
+async function init() {
 
-// set the dimensions and margins of the graph
-var margin = {top: 10, right: 30, bottom: 30, left: 60},
-    width = 1000 - margin.left - margin.right,
-    height = 1000 - margin.top - margin.bottom;
+const data = await d3.csv('https://flunky.github.io/cars2017.csv');
+var logScalex = d3.scaleLog().base(10)
+  .domain([10, 150])
+  .range([0, 200]);
+var logScaley = d3.scaleLog().base(10)
+  .domain([10, 150])
+  .range([200, 0]);
+var margin = 50;
 
-// append the svg object to the body of the page
-var svg = d3.select("#my_dataviz")
-  .append("svg")
-    .attr("width", width + margin.left + margin.right)
-    .attr("height", height + margin.top + margin.bottom)
-  .append("g")
-    .attr("transform",
-          "translate(" + margin.left + "," + margin.top + ")");
 
-//Read the data
+d3.select('svg').attr("width", 400).attr("height", 400)
+.append("g")
+.attr("transform", "translate(50,50)" )
+.selectAll('circle')
+.data(data)
+.enter()
+.append('circle')
+.attr('cx', function(d,i){return logScalex(d.AverageCityMPG);})
+.attr('cy', function(d,i){return logScaley(d.AverageHighwayMPG);})
+.attr('r', function(d,i){return d.EngineCylinders*2 -(d.EngineCylinders)+2 ;})
 
-d3.csv("https://raw.githubusercontent.com/sowjanyabhupathiraju/datavisualisation/blob/master/SnPhistory.csv",
+var logScaleaxisx = d3.scaleLog().base(10)
+  .domain([10, 150])
+  .range([0, 200]);
+var logScaleaxisy = d3.scaleLog().base(10)
+  .domain([10, 150])
+  .range([200, 0]);
 
-  // When reading the csv, I must format variables:
-  function(d){
-    return { date : d3.timeParse("%Y-%m-%d")(d.date), value : d.value }
-  },
+var y_axis = d3.axisLeft().scale(logScaleaxisy);
+d3.select('svg').append("g").attr("transform","translate(50,50)").call((y_axis).tickValues([10,20,50,100]).tickFormat(d3.format("~s")).ticks(4))
 
-  // Now I can use this dataset:
-  function(data) {
 
-    // Add X axis --> it is a date format
-    var x = d3.scaleTime()
-      .domain(d3.extent(data, function(d) { return d.date; }))
-      .range([ 0, width ]);
-    svg.append("g")
-      .attr("transform", "translate(0," + height + ")")
-      .call(d3.axisBottom(x));
-
-    // Add Y axis
-    var y = d3.scaleLinear()
-      .domain([0, d3.max(data, function(d) { return +d.value; })])
-      .range([ height, 0 ]);
-    svg.append("g")
-      .call(d3.axisLeft(y));
-
-    // Add the line
-    svg.append("path")
-      .datum(data)
-      .attr("fill", "none")
-      .attr("stroke", "steelblue")
-      .attr("stroke-width", 1.5)
-      .attr("d", d3.line()
-        .x(function(d) { return x(d.date) })
-        .y(function(d) { return y(d.value) })
-        )
-
-})
-
+var x_axis = d3.axisBottom().scale(logScaleaxisx);
+d3.select('svg').append("g").attr("transform","translate(50,250)").call((x_axis).tickValues([10,20,50,100]).tickFormat(d3.format("~s")))
+}
 </script>
+</body>
+</html>
