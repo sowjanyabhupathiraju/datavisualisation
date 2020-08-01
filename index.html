@@ -53,15 +53,21 @@ svg.append("text")
     .attr("y", 30)
     .text("COVID-19 Spread - World Overview (color indicates Mortality)");
 
-rect = svg.append('rect').transition().duration(500).attr('width', 160)
+rect = svg.append('rect').transition().duration(500).attr('width', 250)
                 .attr('height', 50)
                 .attr('x', 40)
-                .attr('y', 100)
+                .attr('y', 10)
                 .style('fill', 'white')
                 .attr('stroke', 'orange')
 text = svg.append('text').text('Mouseover for details')
                 .attr('x', 50)
-                .attr('y', 125)
+                .attr('y', 30)
+                .attr('fill', 'black')
+
+
+text = svg.append('text').text('Red color indicates higher mortality')
+                .attr('x', 50)
+                .attr('y', 45)
                 .attr('fill', 'black')
 
 
